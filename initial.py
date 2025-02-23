@@ -18,7 +18,7 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Replace with a fixed secret key for production
 
 # Connection string
-CONNECTION_STRING = 'mongodb+srv://alexmvfrancisco:C8JEg4QyncRXMQqT@cluster0.lp8w7.mongodb.net/'
+CONNECTION_STRING = os.getenv("MONGO_URI")
 
 def init_driver():
     # Initialize the Edge WebDriver
@@ -27,11 +27,25 @@ def init_driver():
     driver.maximize_window()
     return driver
 
-# Routing to scanner.html
+# Routing to index.html
 @app.route("/")
 def home():
-    
     return render_template('index.html')
+
+@app.route("/search")
+def search():
+    query = request.args.get('search', '')
+    
+    client = MongoClient(CONNECTION_STRING)
+    db = client['Preços']
+    collection = db['Talho']
+    
+    # Use case-insensitive regex to match any part of the item name
+    results = collection.find({"item-name": {"$regex": query, "$options": "i"}})
+
+    results_list = list(results)
+
+    return render_template('search_results.html', results=results_list)
 
 # Route to scanner.html
 @app.route("/scanner")
