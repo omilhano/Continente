@@ -1,8 +1,15 @@
 from pymongo import MongoClient
-from datetime import date
+from dotenv import load_dotenv
+import os
 
-# Connection string
-CONNECTION_STRING = 'mongodb+srv://alexmvfrancisco:C8JEg4QyncRXMQqT@cluster0.lp8w7.mongodb.net/'
+# Load environment variables from the .env file
+load_dotenv()
+
+# Retrieve MongoDB URI from environment variables
+CONNECTION_STRING = os.getenv("MONGO_URI")
+
+if not CONNECTION_STRING:
+    raise ValueError("MongoDB connection string is missing. Make sure MONGO_URI is set in the .env file.")
 
 # Connect to MongoDB
 client = MongoClient(CONNECTION_STRING)
@@ -11,9 +18,6 @@ client = MongoClient(CONNECTION_STRING)
 db = client['Preços']
 collection = db['Talho']
 
-# Data to insert (example structure)
-# Delete all documents in the collection
+# Delete all documents in the collection (for example)
 result = collection.delete_many({})
 print(f"Deleted {result.deleted_count} documents from the collection.")
-
-

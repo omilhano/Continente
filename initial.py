@@ -31,7 +31,12 @@ def init_driver():
 @app.route("/")
 def home():
     
-    return render_template('scanner.html')
+    return render_template('index.html')
+
+# Route to scanner.html
+@app.route("/scanner")
+def scanner():
+    return render_template("scanner.html")
 
 # "Routing" not really to activate script
 @app.route("/run-script")
