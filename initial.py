@@ -10,6 +10,7 @@ from pymongo import MongoClient
 import os
 import time
 from datetime import date
+from urllib.parse import unquote  # Import unquote to decode URL-encoded strings
 
 # Data Structure Looks like 
 # [{'item-name': 'Peito de Frango em Vácuo', 'item-price': '€5,99', 'date': '09/13/2024'}]
@@ -46,6 +47,14 @@ def search():
     results_list = list(results)
 
     return render_template('search_results.html', results=results_list)
+
+@app.route("/item_page")
+def showcase():
+    # Decode the URL-encoded item_name
+    item_name = unquote(request.args.get('item_name', ''))
+    
+    # Pass the decoded item_name to the template
+    return render_template('item_page.html', item_name=item_name)
 
 # Route to scanner.html
 @app.route("/scanner")

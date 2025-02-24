@@ -9,8 +9,12 @@
     <h1>Search Results</h1>
     <ul>
         {% for result in results %}
-            <li>{{ result['item-name'] }} - {{ result['item-price'] }} - {{ result['date'] }}</li>
-        {% endfor %}
+        <li>
+            <a href="/item_page?item_name={{ result['item-name'] | urlencode }}">
+                {{ result['item-name'] }} - Last price: {{ result['item-price'] }} in {{ result['date'] }}
+            </a>
+        </li>
+    {% endfor %}
     </ul>
     <a href="/">Back to Home</a>
 </body>
