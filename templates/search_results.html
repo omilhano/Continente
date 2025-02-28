@@ -8,10 +8,11 @@
 <body>
     <h1>Search Results</h1>
     <ul>
+        
         {% for result in results %}
         <li>
             <a href="/item_page?item_name={{ result['item-name'] | urlencode }}">
-                {{ result['item-name'] }} - Last price: {{ result['item-price'] }} in {{ result['date'] }}
+                {{ result['item-name'] }}
             </a>
         </li>
     {% endfor %}

@@ -43,14 +43,27 @@ def search():
     
     # Use case-insensitive regex to match any part of the item name
     results = collection.find({"item-name": {"$regex": query, "$options": "i"}})
-
     results_list = list(results)
 
-    return render_template('search_results.html', results=results_list)
+
+    # Remove duplicates from the results
+    # creating empty dict and verifying if already inside
+    # if not add 
+    # otherwise ignore
+    unique_products= {}
+    for product in results_list:
+        item_name = product['item-name']
+        if item_name not in unique_products:
+            unique_products[item_name] = product
+
+    unique_products = list(unique_products.values())
+    # print((unique_products))
+    return render_template('search_results.html', results=unique_products)
 
 @app.route("/item_page")
 def showcase():
     # Decode the URL-encoded item_name
+    # Fetch do item e organizar preço por data
     item_name = unquote(request.args.get('item_name', ''))
     
     # Pass the decoded item_name to the template
